@@ -1,0 +1,51 @@
+substitutions:
+  _REGION: us-central1
+  _AR_REPO: time-series-arena
+  _SERVICE: time-series-arena
+  _GCS_BUCKET: time-series-arena-artifacts
+  _API_BASE: "https://REPLACE-WITH-CLOUD-RUN-URL"
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    id: Build image
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    id: Push image
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: Deploy Cloud Run
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+      - --region
+      - ${_REGION}
+      - --platform
+      - managed
+      - --allow-unauthenticated
+      - --set-env-vars
+      - API_BASE=${_API_BASE}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: Upload artifacts to GCS
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        gsutil -m rsync -r models gs://${_GCS_BUCKET}/models || true
+        gsutil -m rsync -r data/processed gs://${_GCS_BUCKET}/data/processed || true
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA

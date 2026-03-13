@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Git / editor
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Local env and notebooks cache
+.env
+.env.*
+.ipynb_checkpoints/
+
+# Virtual env
+venv/
+.venv/
+venv-time-series/
+
+# Local artifacts not needed in image
+data/
+models/
+notebooks/
+*.db
+*.log
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

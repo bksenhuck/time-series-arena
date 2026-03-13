@@ -1,0 +1,62 @@
+/* ── Bootswatch Slate global reset ───────────────────────────────────────── */
+html, body {
+    background-color: #272b30 !important;
+    color: #aab3bc;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Dash root container */
+#_dash-app-content,
+#react-entry-point {
+    background-color: #272b30;
+}
+
+/* ── Dash Dropdown — Slate theme ─────────────────────────────────────────── */
+.Select-control {
+    background-color: #484e55 !important;
+    border-color: #484e55 !important;
+    color: #aab3bc !important;
+}
+
+.Select-value-label,
+.Select-placeholder {
+    color: #aab3bc !important;
+}
+
+.Select-menu-outer {
+    background-color: #3a3f44 !important;
+    border-color: #484e55 !important;
+    z-index: 9999 !important;
+}
+
+.VirtualizedSelectOption {
+    background-color: #3a3f44 !important;
+    color: #aab3bc !important;
+}
+
+.VirtualizedSelectOption.VirtualizedSelectOption--focused,
+.VirtualizedSelectFocusedOption {
+    background-color: #484e55 !important;
+    color: #aab3bc !important;
+}
+
+.Select-arrow {
+    border-top-color: #aab3bc !important;
+}
+
+/* ── Dash slider track ────────────────────────────────────────────────────── */
+.rc-slider-track {
+    background-color: #5bc0de !important;
+}
+.rc-slider-handle {
+    border-color: #5bc0de !important;
+    background-color: #5bc0de !important;
+}
+
+/* ── Loading spinner ─────────────────────────────────────────────────────── */
+._dash-loading {
+    background-color: transparent !important;
+}
