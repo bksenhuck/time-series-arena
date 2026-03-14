@@ -348,7 +348,7 @@ def _split_hist_by_forecast_start(hist_dates, hist_views, all_forecasts: dict):
     for fc_by_h in all_forecasts.values():
         for fc in fc_by_h.values():
             if fc.get("dates"):
-                candidate = fc["dates"][0]
+                candidate = fc["dates"][0][:10]  # normalise to YYYY-MM-DD
                 if first_fc_date is None or candidate < first_fc_date:
                     first_fc_date = candidate
 
@@ -356,14 +356,17 @@ def _split_hist_by_forecast_start(hist_dates, hist_views, all_forecasts: dict):
         return hist_dates, hist_views, [], []
 
     split = next(
-        (i for i, d in enumerate(hist_dates) if d >= first_fc_date),
+        (i for i, d in enumerate(hist_dates) if d[:10] >= first_fc_date),
         len(hist_dates),
     )
     return hist_dates[:split], hist_views[:split], hist_dates[split:], hist_views[split:]
 
 
-def _add_model_lines(fig: go.Figure, all_forecasts: dict):
-    """Add multi-horizon model lines with consistent opacity/width mapping."""
+def _add_model_lines(fig: go.Figure, all_forecasts: dict, fixed_opacity: float | None = None):
+    """Add multi-horizon model lines with consistent opacity/width mapping.
+
+    fixed_opacity: when set, all lines use that opacity (ignores horizon-based scaling).
+    """
     all_forecasts = {
         m: {int(h): fc for h, fc in by_h.items()}
         for m, by_h in all_forecasts.items()
@@ -378,7 +381,7 @@ def _add_model_lines(fig: go.Figure, all_forecasts: dict):
 
         for h in sorted(fc_by_horizon):
             fc = fc_by_horizon[h]
-            opacity = opacity_map.get(h, 1.0)
+            opacity = fixed_opacity if fixed_opacity is not None else opacity_map.get(h, 1.0)
             line_color = f"rgba({r},{g},{b},{opacity})"
 
             fig.add_trace(go.Scatter(
@@ -487,7 +490,7 @@ def multi_horizon_test_chart(
             hovertemplate="<b>Real</b><br>%{x}<br>%{y:,.0f} views<extra></extra>",
         ))
 
-    _add_model_lines(fig, all_forecasts)
+    _add_model_lines(fig, all_forecasts, fixed_opacity=1.0)
 
     layout = _base_layout(f"Forecast (Teste) — {page.replace('_', ' ')}")
     layout["showlegend"] = False

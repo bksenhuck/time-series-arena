@@ -232,6 +232,12 @@ def layout() -> html.Div:
             ], style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
 
+        html.Hr(style={
+            "border": "none",
+            "borderTop": f"1px solid {T['border']}",
+            "margin": "28px 0",
+        }),
+
         # Scenario comparison section
         card([
             html.H4("Comparacao de Cenarios (3m, 6m, 9m)", style={

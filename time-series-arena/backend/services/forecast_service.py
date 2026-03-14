@@ -330,7 +330,7 @@ def _put_cache(series_id: str, model_type: str, horizon: int, fc: dict):
 def _load_forecast_from_parquet(path: str) -> dict:
     df = pd.read_parquet(path)
     return {
-        "dates": df["date"].astype(str).tolist(),
+        "dates": pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d").tolist(),
         "mean": df["mean"].astype(float).tolist(),
         "lower": df["lower"].astype(float).tolist(),
         "upper": df["upper"].astype(float).tolist(),

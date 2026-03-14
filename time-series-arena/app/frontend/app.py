@@ -9,6 +9,7 @@ T = THEME
 
 _NAV = [
     ("Dashboard", "/"),
+    ("Modelos", "/models"),
     ("Sobre", "/about"),
 ]
 
